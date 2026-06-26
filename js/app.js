@@ -365,28 +365,27 @@ function handleCheckout(event) {
   const shippingCost = subtotal >= FREE_SHIPPING_LIMIT ? 0 : DEFAULT_SHIPPING_COST;
   const finalTotal = subtotal + shippingCost;
   
-  // Format the WhatsApp message
-  let message = `السلام عليكم ورحمة الله وبركاته،\n`;
-  message += `أود طلب الوجبات التالية من *حواوشي النصر* 🌯🔥:\n`;
-  message += `---------------------------------\n`;
+  // Format the WhatsApp message with rich emojis and clean line breaks
+  let message = `السلام عليكم ورحمة الله وبركاته 😋\n\n`;
+  message += `أود طلب الوجبات التالية من *حواوشي النصر* 🌯🔥:\n\n`;
   
   cart.forEach((item, index) => {
     const itemTotal = item.product.price * item.quantity;
-    message += `${index + 1}. *${item.product.name}* (${item.product.price}ج) × ${item.quantity} = *${itemTotal}ج*\n`;
+    message += `🍽️ *${item.product.name}*\n`;
+    message += `   السعر: ${item.product.price} ج × ${item.quantity} = *${itemTotal} ج* 🍴\n\n`;
   });
   
-  message += `---------------------------------\n`;
-  message += `🔹 إجمالي الوجبات: *${subtotal} ج*\n`;
+  message += `💵 *تفاصيل الحساب*:\n`;
+  message += `🔸 إجمالي الوجبات: *${subtotal} ج*\n`;
   message += `🚚 خدمة التوصيل: ${shippingCost === 0 ? '*مجاناً 🎉*' : `*${shippingCost} ج* (${cityName})`}\n`;
-  message += `💰 إجمالي الحساب الكلي: *${finalTotal} ج*\n`;
-  message += `---------------------------------\n`;
+  message += `💰 إجمالي الحساب الكلي: *${finalTotal} ج* 😋\n\n`;
+  
   message += `📝 *بيانات التوصيل للعميل*:\n`;
   message += `👤 *الاسم*: ${name}\n`;
-  message += `📍 *المحافظة*: ${cityName}\n`;
+  message += `📍 *المنطقة*: ${cityName}\n`;
   message += `🏠 *العنوان بالتفصيل*: ${address}\n`;
-  message += `📞 *رقم الهاتف للاتصال*: ${phone}\n`;
-  message += `---------------------------------\n`;
-  message += `شكراً جزيلاً وفي انتظار تجهيز الأوردر وتأكيده 🌟`;
+  message += `📞 *رقم الهاتف*: ${phone}\n\n`;
+  message += `وفي انتظار تجهيز الأوردر وتأكيده 🍔🔥`;
   
   // Encode URI text
   const encodedText = encodeURIComponent(message);

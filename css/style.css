@@ -727,10 +727,17 @@ header {
   border-radius: 10px;
 }
 
-/* Cart Items Container */
-.cart-items-list {
+.cart-drawer-content-scroll {
   flex: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cart Items Container */
+.cart-items-list {
+  flex: none;
+  overflow-y: visible;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;

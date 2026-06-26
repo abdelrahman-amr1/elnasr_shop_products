@@ -112,57 +112,60 @@
       </div>
     </div>
 
-    <!-- Cart Items list -->
-    <div class="cart-items-list" id="cartItemsList">
-      <!-- Dynamically Rendered Cart Items -->
-    </div>
-
-    <!-- Checkout section -->
-    <div class="cart-checkout-section" id="cartCheckoutSection" style="display: none;">
-      <div class="cart-summary-row">
-        <span>إجمالي المشتريات:</span>
-        <span id="cartSubtotal">0 ج</span>
-      </div>
-      <div class="cart-summary-row">
-        <span>مصاريف التوصيل:</span>
-        <span id="cartShipping">احسب أولاً</span>
-      </div>
-      <div class="cart-summary-row total">
-        <span>الإجمالي الكلي:</span>
-        <span id="cartTotal">0 ج</span>
+    <!-- Scrollable container for cart list and checkout form -->
+    <div class="cart-drawer-content-scroll">
+      <!-- Cart Items list -->
+      <div class="cart-items-list" id="cartItemsList">
+        <!-- Dynamically Rendered Cart Items -->
       </div>
 
-      <!-- Customer Checkout Details Form -->
-      <form class="checkout-form" id="checkoutForm" onsubmit="handleCheckout(event)">
-        <div class="form-group">
-          <label for="custName"><i class="fa-solid fa-user"></i> الاسم بالكامل *</label>
-          <input type="text" id="custName" required placeholder="أدخل اسمك لتجهيز الطلب">
+      <!-- Checkout section -->
+      <div class="cart-checkout-section" id="cartCheckoutSection" style="display: none;">
+        <div class="cart-summary-row">
+          <span>إجمالي المشتريات:</span>
+          <span id="cartSubtotal">0 ج</span>
         </div>
-        
-        <div class="form-group">
-          <label for="custCity"><i class="fa-solid fa-map-location-dot"></i> منطقة التوصيل *</label>
-          <select id="custCity" required onchange="calculateShippingPrice()">
-            <option value="" disabled selected>اختر المحافظة</option>
-            <option value="cairo">القاهرة</option>
-            <option value="giza">الجيزة</option>
-          </select>
+        <div class="cart-summary-row">
+          <span>مصاريف التوصيل:</span>
+          <span id="cartShipping">احسب أولاً</span>
         </div>
-        
-        <div class="form-group">
-          <label for="custAddress"><i class="fa-solid fa-house"></i> العنوان بالتفصيل *</label>
-          <input type="text" id="custAddress" required placeholder="المنطقة، اسم الشارع، رقم العقار والشقة">
-        </div>
-        
-        <div class="form-group">
-          <label for="custPhone"><i class="fa-solid fa-phone"></i> رقم الهاتف (متاح عليه واتساب) *</label>
-          <input type="tel" id="custPhone" required placeholder="01xxxxxxxxx">
+        <div class="cart-summary-row total">
+          <span>الإجمالي الكلي:</span>
+          <span id="cartTotal">0 ج</span>
         </div>
 
-        <button type="submit" class="whatsapp-checkout-btn">
-          <i class="fa-brands fa-whatsapp"></i>
-          <span>إرسال وتأكيد الأوردر عبر الواتساب</span>
-        </button>
-      </form>
+        <!-- Customer Checkout Details Form -->
+        <form class="checkout-form" id="checkoutForm" onsubmit="handleCheckout(event)">
+          <div class="form-group">
+            <label for="custName"><i class="fa-solid fa-user"></i> الاسم بالكامل *</label>
+            <input type="text" id="custName" required placeholder="أدخل اسمك لتجهيز الطلب">
+          </div>
+          
+          <div class="form-group">
+            <label for="custCity"><i class="fa-solid fa-map-location-dot"></i> منطقة التوصيل *</label>
+            <select id="custCity" required onchange="calculateShippingPrice()">
+              <option value="" disabled selected>اختر المحافظة</option>
+              <option value="cairo">القاهرة</option>
+              <option value="giza">الجيزة</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="custAddress"><i class="fa-solid fa-house"></i> العنوان بالتفصيل *</label>
+            <input type="text" id="custAddress" required placeholder="المنطقة، اسم الشارع، رقم العقار والشقة">
+          </div>
+          
+          <div class="form-group">
+            <label for="custPhone"><i class="fa-solid fa-phone"></i> رقم الهاتف (متاح عليه واتساب) *</label>
+            <input type="tel" id="custPhone" required placeholder="01xxxxxxxxx">
+          </div>
+
+          <button type="submit" class="whatsapp-checkout-btn">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>إرسال وتأكيد الأوردر عبر الواتساب</span>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -192,11 +195,11 @@
     </div>
     <div class="footer-contact">
       <div class="footer-contact-item" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
-        <a href="tel:01113980729" class="btn btn-outline" style="color: var(--white); border-color: rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <a href="tel:01113980729" class="btn" style="background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
           <i class="fa-solid fa-phone"></i>
           <span>اتصل بنا: 01113980729</span>
         </a>
-        <a href="tel:0233355332" class="btn btn-outline" style="color: var(--white); border-color: rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <a href="tel:0233355332" class="btn" style="background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
           <i class="fa-solid fa-phone"></i>
           <span>الأرضي: 0233355332</span>
         </a>
