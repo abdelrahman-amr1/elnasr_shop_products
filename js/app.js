@@ -392,10 +392,10 @@ function handleCheckout(event) {
   const encodedText = encodeURIComponent(message);
   
   // Create WhatsApp URL
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedText}`;
+  const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodedText}`;
   
-  // Redirect
-  window.open(waUrl, "_blank");
+  // Redirect directly via location.href to prevent popup blocking on mobile
+  window.location.href = waUrl;
   
   // Clear cart and UI
   cart = [];
