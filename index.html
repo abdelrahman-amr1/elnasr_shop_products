@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حواوشي النصر | أصل الحواوشي البلدي والورقة المميزة</title>
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Central Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="assets/logo.jpg" alt="حواوشي النصر">
+        <div class="logo-text">
+          <h1>حواوشي النصر</h1>
+          <span>أصل الحواوشي البلدي والورقة</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a href="admin/index.html" class="admin-link">
+          <i class="fa-solid fa-lock"></i>
+          <span>لوحة التحكم</span>
+        </a>
+        <button class="cart-btn" id="cartBtn" onclick="toggleCart(true)">
+          <i class="fa-solid fa-basket-shopping"></i>
+          <span>الطلبات</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="slogan-badge">🌯 طعم بلدي على أصوله من فرن النصر 🔥</span>
+      <h2>أقوى تتبيلة حواوشي و <span>ورقات لحمة بالفرن</span></h2>
+      <p>حواوشي بلدي طازج بالسادة والجبن، وورقات لحمة وسجق وكبدة بلدي في الفرن مطبوخة بأعلى جودة. اطلب الآن واستمتع بطعم لا يقاوم!</p>
+      
+      <div class="info-cards">
+        <div class="info-card">
+          <i class="fa-solid fa-phone-flip"></i>
+          <div>
+            <h4>أرقام الدليفري والتوصيل</h4>
+            <p>01113980729 - 0233355332</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div>
+            <h4>واتساب الطلبات المباشر</h4>
+            <p>01026401035</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-truck-ramp-box"></i>
+          <div>
+            <h4>توصيل سريع وسخن</h4>
+            <p>خدمة توصيل تغطي القاهرة والجيزة</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop Container -->
+  <main class="shop-container">
+    
+    <!-- Control Bar: Search & Category Filters -->
+    <div class="control-bar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث عن وجبة أو حواوشي..." oninput="filterProducts()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      
+      <div class="categories-filter" id="categoryFilterContainer">
+        <button class="category-tab active" data-category="all" onclick="setCategory('all')">كل المنيو</button>
+        <button class="category-tab" data-category="hawawshi" onclick="setCategory('hawawshi')">حواوشي النصر</button>
+        <button class="category-tab" data-category="plates" onclick="setCategory('plates')">الوجبات والورقات المميزة</button>
+      </div>
+    </div>
+
+    <!-- Product Grid Listing -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Generated Dynamically by JS -->
+    </div>
+  </main>
+
+  <!-- Sliding Cart Drawer Panel -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="toggleCart(false)"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    
+    <!-- Cart Header -->
+    <div class="cart-drawer-header">
+      <h2>سلة طلباتك</h2>
+      <button class="close-cart-btn" onclick="toggleCart(false)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Free Shipping Tracker -->
+    <div class="shipping-tracker" id="shippingTracker">
+      <div class="shipping-tracker-text">
+        <span id="shippingTrackerMsg">أضف وجبات بقيمة 500ج للحصول على توصيل مجاني</span>
+        <strong id="shippingTrackerAmount">500 ج متبقية</strong>
+      </div>
+      <div class="shipping-tracker-progress-bg">
+        <div class="shipping-tracker-progress-bar" id="shippingTrackerProgress"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items list -->
+    <div class="cart-items-list" id="cartItemsList">
+      <!-- Dynamically Rendered Cart Items -->
+    </div>
+
+    <!-- Checkout section -->
+    <div class="cart-checkout-section" id="cartCheckoutSection" style="display: none;">
+      <div class="cart-summary-row">
+        <span>إجمالي المشتريات:</span>
+        <span id="cartSubtotal">0 ج</span>
+      </div>
+      <div class="cart-summary-row">
+        <span>مصاريف التوصيل:</span>
+        <span id="cartShipping">احسب أولاً</span>
+      </div>
+      <div class="cart-summary-row total">
+        <span>الإجمالي الكلي:</span>
+        <span id="cartTotal">0 ج</span>
+      </div>
+
+      <!-- Customer Checkout Details Form -->
+      <form class="checkout-form" id="checkoutForm" onsubmit="handleCheckout(event)">
+        <div class="form-group">
+          <label for="custName"><i class="fa-solid fa-user"></i> الاسم بالكامل *</label>
+          <input type="text" id="custName" required placeholder="أدخل اسمك لتجهيز الطلب">
+        </div>
+        
+        <div class="form-group">
+          <label for="custCity"><i class="fa-solid fa-map-location-dot"></i> منطقة التوصيل *</label>
+          <select id="custCity" required onchange="calculateShippingPrice()">
+            <option value="" disabled selected>اختر المحافظة</option>
+            <option value="cairo">القاهرة</option>
+            <option value="giza">الجيزة</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="custAddress"><i class="fa-solid fa-house"></i> العنوان بالتفصيل *</label>
+          <input type="text" id="custAddress" required placeholder="المنطقة، اسم الشارع، رقم العقار والشقة">
+        </div>
+        
+        <div class="form-group">
+          <label for="custPhone"><i class="fa-solid fa-phone"></i> رقم الهاتف (متاح عليه واتساب) *</label>
+          <input type="tel" id="custPhone" required placeholder="01xxxxxxxxx">
+        </div>
+
+        <button type="submit" class="whatsapp-checkout-btn">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>إرسال وتأكيد الأوردر عبر الواتساب</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Mobile Sticky Cart Bar -->
+  <div class="floating-cart-bar" id="floatingCartBar">
+    <div class="floating-cart-info">
+      <h4 id="floatingCartTotal">0 ج</h4>
+      <p id="floatingCartCount">السلة فارغة</p>
+    </div>
+    <button class="open-drawer-btn" onclick="toggleCart(true)">
+      <i class="fa-solid fa-basket-shopping"></i>
+      <span>عرض السلة وتأكيد الأوردر</span>
+    </button>
+  </div>
+
+  <!-- Toast notifications container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-logo">
+      <h2>حواوشي <span>النصر</span> المميز</h2>
+      <p>طعم بلدي بلحمة طازجة وتتبيلة سرية تفوق الوصف</p>
+    </div>
+    <div class="footer-slogan">
+      "الجودة هي سر تميزنا ورضاكم هو غايتنا"
+    </div>
+    <div class="footer-contact">
+      <div class="footer-contact-item" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
+        <a href="tel:01113980729" class="btn btn-outline" style="color: var(--white); border-color: rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-phone"></i>
+          <span>اتصل بنا: 01113980729</span>
+        </a>
+        <a href="tel:0233355332" class="btn btn-outline" style="color: var(--white); border-color: rgba(255,255,255,0.3); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+          <i class="fa-solid fa-phone"></i>
+          <span>الأرضي: 0233355332</span>
+        </a>
+        <a href="https://wa.me/201026401035" target="_blank" class="btn" style="background: #25d366; color: var(--white); font-size: 0.85rem; padding: 0.5rem 1rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 10px rgba(37,211,102,0.15);">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>واتساب الطلبات: 01026401035</span>
+        </a>
+      </div>
+      <div class="footer-contact-item" style="margin-top: 0.5rem;">
+        <i class="fa-solid fa-truck"></i>
+        <span>التوصيل متوفر في القاهرة والجيزة فقط</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 جميع الحقوق محفوظة لمحلات حواوشي النصر. 
+      تصميم وتطوير <a href="https://abdelrahman-amr1.github.io/AbdelrahmanAmr/#portfolio" target="_blank" style="color: var(--secondary-color); text-decoration: underline; font-weight: 700;">المهندس عبدالرحمن عمرو</a>.
+    </div>
+  </footer>
+
+  <!-- Supabase JS Client SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js?v=2"></script>
+
+  <!-- Scripts -->
+  <script src="js/database.js?v=2"></script>
+  <script src="js/app.js?v=2"></script>
+</body>
+</html>

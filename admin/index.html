@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم | حواوشي النصر</title>
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Central Stylesheet -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <img src="../assets/logo.jpg" alt="حواوشي النصر">
+        <div class="logo-text">
+          <h1>لوحة تحكم القائمة</h1>
+          <span>إدارة أسعار وتوافر وجبات حواوشي النصر</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <!-- Return to store link -->
+        <a href="../index.html" class="admin-link" style="background: var(--primary-color); color: var(--white); border-color: var(--primary-color);">
+          <i class="fa-solid fa-store"></i>
+          <span>الذهاب للمتجر</span>
+        </a>
+        <!-- Logout button (hidden when not logged in) -->
+        <button id="logoutBtn" onclick="handleAdminLogout()" class="admin-link" style="background: var(--dark-color); color: var(--white); border-color: var(--dark-color); cursor: pointer; display: none;">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Container (Shown by default, hidden when authenticated) -->
+  <div id="adminLoginContainer" style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 2rem;">
+    <div class="modal-card" style="max-width: 400px; box-shadow: var(--shadow-lg); background: var(--white); border-radius: var(--border-radius-md); overflow: hidden;">
+      <div class="modal-header" style="background: var(--gray-100); padding: 1.25rem 1.5rem; text-align: center;">
+        <h3 style="width: 100%; font-weight: 800; color: var(--dark-color); text-align: center;">
+          <i class="fa-solid fa-lock"></i> تسجيل دخول لوحة التحكم
+        </h3>
+      </div>
+      <div class="modal-body" style="padding: 2rem 1.5rem;">
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="form-group">
+            <label for="loginUser"><i class="fa-solid fa-user"></i> اسم المستخدم</label>
+            <input type="text" id="loginUser" required placeholder="أدخل اسم المستخدم" style="width: 100%; padding: 0.6rem 0.8rem;">
+          </div>
+          <div class="form-group">
+            <label for="loginPass"><i class="fa-solid fa-key"></i> كلمة المرور</label>
+            <input type="password" id="loginPass" required placeholder="أدخل كلمة المرور" style="width: 100%; padding: 0.6rem 0.8rem;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-size: 1rem; margin-top: 0.5rem; font-weight: 800;">
+            دخول النظام
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard Content (Hidden by default, shown when authenticated) -->
+  <div id="adminDashboardContent" style="display: none;">
+    <!-- Admin Stats Counter Grid -->
+    <section class="admin-stats">
+      <div class="stat-card primary">
+        <div class="stat-icon"><i class="fa-solid fa-utensils"></i></div>
+        <div class="stat-info">
+          <h3 id="statTotalProducts">0</h3>
+          <p>إجمالي الوجبات بالمنيو</p>
+        </div>
+      </div>
+      
+      <div class="stat-card success">
+        <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-info">
+          <h3 id="statActiveProducts">0</h3>
+          <p>وجبات متوفرة للطلب</p>
+        </div>
+      </div>
+      
+      <div class="stat-card" style="border-right-color: var(--danger-color);">
+        <div class="stat-icon" style="color: var(--danger-color);"><i class="fa-solid fa-circle-xmark"></i></div>
+        <div class="stat-info">
+          <h3 id="statOutOfStock">0</h3>
+          <p>وجبات غير متوفرة (غير متاحة)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Main Shop Container -->
+    <main class="shop-container" style="padding-top: 0;">
+      
+      <!-- Admin Dashboard Toolbar (Search, Filter, Actions) -->
+      <div class="admin-toolbar">
+        <div style="display: flex; gap: 1rem; flex: 1; flex-wrap: wrap;">
+          <div class="search-box" style="max-width: 320px;">
+            <input type="text" id="adminSearchInput" placeholder="ابحث باسم الوجبة..." oninput="filterAdminProducts()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          
+          <select id="adminCategorySelect" onchange="filterAdminProducts()" style="padding: 0.6rem 1rem; border: 1.5px solid var(--gray-300); border-radius: var(--border-radius-sm); outline: none; background: var(--white); font-weight: 700;">
+            <option value="all">كل الأقسام</option>
+            <option value="hawawshi">حواوشي النصر</option>
+            <option value="plates">الوجبات والورقات المميزة</option>
+          </select>
+        </div>
+        
+        <div class="admin-actions">
+          <button class="btn btn-secondary" onclick="confirmResetDB()">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+            <span>إعادة ضبط المنيو الافتراضي</span>
+          </button>
+          <button class="btn btn-primary" onclick="openProductModal(null)">
+            <i class="fa-solid fa-plus"></i>
+            <span>إضافة وجبة جديدة</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Products Table -->
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width: 20%">القسم</th>
+              <th style="width: 35%">اسم الوجبة</th>
+              <th style="width: 15%">السعر (ج)</th>
+              <th style="width: 10%">الوحدة</th>
+              <th style="width: 10% ;text-align: center;">التوافر للطلب</th>
+              <th style="width: 10%; text-align: center;">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsTableBody">
+            <!-- Dynamically filled by admin.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Backup & Database Management Info -->
+      <section class="backup-section" style="margin-top: 3rem; padding: 0;">
+        <div class="backup-card">
+          <div class="backup-text">
+            <h4>نسخ احتياطي واستعادة قائمة المنيو</h4>
+            <p>يمكنك تصدير قائمة الوجبات والأسعار الحالية لحفظها كملف، أو استيراد قائمة جديدة مسبقاً لتحديث قائمة الطعام والأسعار دفعة واحدة.</p>
+          </div>
+          <div class="backup-buttons">
+            <button class="btn btn-outline" onclick="exportData()">
+              <i class="fa-solid fa-file-export"></i>
+              <span>تصدير المنيو (JSON)</span>
+            </button>
+            <button class="btn btn-outline" onclick="triggerImport()">
+              <i class="fa-solid fa-file-import"></i>
+              <span>استيراد المنيو (JSON)</span>
+            </button>
+            <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importData(event)">
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Product Form Modal Overlay -->
+  <div class="modal-overlay" id="productModalOverlay" onclick="closeProductModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="modalTitle">إضافة وجبة جديدة</h3>
+        <button class="close-modal-btn" onclick="closeProductModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form class="modal-form" id="productForm" onsubmit="saveProductForm(event)">
+          <input type="hidden" id="modalProductId">
+          
+          <div class="form-group">
+            <label for="prodName">اسم الوجبة / المنتج *</label>
+            <input type="text" id="prodName" required placeholder="مثال: حواوشي ميكس جبن مميز">
+          </div>
+          
+          <div class="modal-form-row-2">
+            <div class="form-group">
+              <label for="prodCategory">التصنيف الرئيسي *</label>
+              <select id="prodCategory" required>
+                <option value="hawawshi">حواوشي النصر</option>
+                <option value="plates">الوجبات والورقات المميزة</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="prodAvailable">حالة التوافر للطلب</label>
+              <select id="prodAvailable">
+                <option value="true">متوفر للطلب</option>
+                <option value="false">غير متوفر حالياً</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-form-row-2">
+            <div class="form-group">
+              <label for="prodPrice">سعر البيع (ج) *</label>
+              <input type="number" id="prodPrice" required min="0" step="0.5" placeholder="مثال: 70">
+            </div>
+            
+            <div class="form-group">
+              <label for="prodUnit">الوحدة التسعيرية *</label>
+              <input type="text" id="prodUnit" required placeholder="مثال: رغيف، ورقة، وجبة">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="prodDesc">وصف الوجبة ومكوناتها</label>
+            <textarea id="prodDesc" rows="3" placeholder="مثال: لحم بلدي طازج متبل مع جبن شيدر وموتزاريلا ورومي..."></textarea>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeProductModal()">إلغاء</button>
+        <button type="submit" form="productForm" class="btn btn-primary" id="saveModalBtn">إضافة الوجبة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifications container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer Section -->
+  <footer style="margin-top: 6rem;">
+    <div class="footer-logo">
+      <h2>لوحة إدارة <span>حواوشي النصر</span></h2>
+      <p>تعديل الأسعار والتوافر وإدارة المنيو بالكامل</p>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 جميع الحقوق محفوظة لمحلات حواوشي النصر. 
+      تصميم وتطوير <a href="https://abdelrahman-amr1.github.io/AbdelrahmanAmr/#portfolio" target="_blank" style="color: var(--secondary-color); text-decoration: underline; font-weight: 700;">المهندس عبدالرحمن عمرو</a>.
+    </div>
+  </footer>
+
+  <!-- Supabase JS Client SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-config.js?v=2"></script>
+
+  <!-- Scripts -->
+  <script src="../js/database.js?v=2"></script>
+  <script src="../js/admin.js?v=2"></script>
+</body>
+</html>
