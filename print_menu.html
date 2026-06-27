@@ -234,14 +234,14 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Product Card - Built as a grid to prevent height layout shifting in print engines */
+    /* Product Card - Flex Layout with explicit proportional heights */
     .product-card {
       background: var(--white);
       border: 1.5px solid var(--gray-200);
       border-radius: 12px;
       overflow: hidden;
-      display: grid;
-      grid-template-rows: 2.2fr 1fr; /* Image is 2.2 parts, Info details are 1 part */
+      display: flex;
+      flex-direction: column;
       height: 100%;
       width: 100%;
       box-shadow: 0 3px 8px rgba(0,0,0,0.05);
@@ -251,12 +251,15 @@
     .product-image {
       position: relative;
       width: 100%;
-      height: 100%;
+      height: 65%; /* Fixed percentage height */
       overflow: hidden;
       border-bottom: 1.5px solid var(--gray-100);
     }
 
     .product-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -286,7 +289,7 @@
       justify-content: space-between;
       background: var(--white);
       width: 100%;
-      height: 100%;
+      height: 35%; /* Remaining percentage height */
       overflow: hidden;
     }
 
@@ -352,6 +355,8 @@
         left: auto !important;
         transform: none !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
         
         /* Scale layout spacing and borders relative to viewport */
         padding: 1.5vw !important;
@@ -361,7 +366,12 @@
       }
 
       .menu-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-rows: repeat(3, 1fr) !important;
         gap: 1vw !important;
+        height: 100% !important;
+        width: 100% !important;
       }
 
       /* Scale Brand Card */
@@ -410,13 +420,19 @@
         margin-top: 0.8vw !important;
       }
 
-      /* Scale Product Cards */
+      /* Scale Product Cards and force absolute scaling */
       .product-card {
         border-width: 0.1vw !important;
         border-radius: 0.8vw !important;
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        width: 100% !important;
       }
 
       .product-image {
+        height: 65% !important; /* Lock image area */
+        width: 100% !important;
         border-bottom-width: 0.1vw !important;
       }
 
@@ -430,6 +446,8 @@
       }
 
       .product-info {
+        height: 35% !important; /* Lock info text area */
+        width: 100% !important;
         padding: 0.5vw 0.8vw !important;
       }
 
