@@ -12,6 +12,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap">
   
   <style>
+    /* Top-level @page rule to force landscape and remove default browser headers/footers */
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
     :root {
       --primary-color: #9b1c1c;      /* Deep Maroon Red */
       --secondary-color: #d4af37;    /* Warm Gold */
@@ -97,7 +103,7 @@
       transform: translateY(-1px);
     }
 
-    /* Print Page Container (16:9 Landscape) */
+    /* Print Page Container (16:9 Landscape) - Screen Mode */
     .menu-page {
       width: 297mm;
       height: 167mm; /* Exactly 16:9 ratio for 297mm width */
@@ -228,27 +234,34 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Product Card */
+    /* Product Card - Built as a grid to prevent height layout shifting in print engines */
     .product-card {
       background: var(--white);
       border: 1.5px solid var(--gray-200);
       border-radius: 12px;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: 2.2fr 1fr; /* Image is 2.2 parts, Info details are 1 part */
+      height: 100%;
+      width: 100%;
       box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-      transition: transform 0.2s ease;
       position: relative;
     }
 
     .product-image {
-      width: 100%;
-      height: 72%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border-bottom: 1.5px solid var(--gray-100);
       position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-bottom: 1.5px solid var(--gray-100);
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
     }
 
     .product-category-badge {
@@ -263,6 +276,7 @@
       padding: 0.5mm 2mm;
       border-radius: 4px;
       border: 1px solid rgba(212, 175, 55, 0.4);
+      z-index: 5;
     }
 
     .product-info {
@@ -270,8 +284,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      flex: 1;
       background: var(--white);
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     .product-name {
@@ -281,7 +297,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 0.5mm;
     }
 
     .product-meta {
@@ -289,7 +304,7 @@
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--gray-100);
-      padding-top: 1mm;
+      padding-top: 1px;
     }
 
     .product-price {
@@ -304,7 +319,7 @@
       font-weight: 600;
     }
 
-    /* Print Specific Styles */
+    /* Print Specific Styles - Viewport Sized (vw) Vector Scaling */
     @media print {
       .no-print-bar {
         display: none !important;
@@ -312,30 +327,127 @@
       
       body {
         background: var(--white) !important;
-        padding: 0;
-        margin: 0;
-        width: 297mm;
-        height: 210mm;
-        display: block;
-        overflow: hidden;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
 
-      @page {
-        size: A4 landscape;
-        margin: 0;
-      }
-
+      /* Viewport scaled 16:9 container, guarantees fitting on exactly 1 single page */
       .menu-page {
         box-shadow: none !important;
         margin: 0 !important;
-        width: 297mm !important;
-        height: 167mm !important;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        width: 100vw !important;
+        height: 56.25vw !important; /* 9/16 aspect ratio of the viewport width */
+        max-height: 100vh !important;
+        max-width: 177.78vh !important; /* Limit width if page height is the bottleneck */
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        box-sizing: border-box !important;
+        
+        /* Scale layout spacing and borders relative to viewport */
+        padding: 1.5vw !important;
+        border-width: 0.5vw !important;
+        outline-width: 0.2vw !important;
+        outline-offset: -0.8vw !important;
+      }
+
+      .menu-grid {
+        gap: 1vw !important;
+      }
+
+      /* Scale Brand Card */
+      .brand-card {
+        padding: 1vw !important;
+        border-width: 0.15vw !important;
+        border-radius: 0.8vw !important;
+      }
+
+      .brand-logo {
+        width: 4.8vw !important;
+        height: 4.8vw !important;
+        border-width: 0.2vw !important;
+        margin-bottom: 0.5vw !important;
+      }
+
+      .brand-name {
+        font-size: 2vw !important;
+        margin-bottom: 0.1vw !important;
+      }
+
+      .brand-slogan {
+        font-size: 0.9vw !important;
+        margin-bottom: 0.8vw !important;
+      }
+
+      .contact-box {
+        padding: 0.4vw !important;
+        gap: 0.2vw !important;
+        border-radius: 0.5vw !important;
+        border-width: 0.08vw !important;
+      }
+
+      .contact-item {
+        font-size: 0.95vw !important;
+        gap: 0.4vw !important;
+      }
+
+      .contact-item i {
+        font-size: 1vw !important;
+      }
+
+      .delivery-badge {
+        font-size: 0.8vw !important;
+        padding: 0.2vw 0.8vw !important;
+        margin-top: 0.8vw !important;
+      }
+
+      /* Scale Product Cards */
+      .product-card {
+        border-width: 0.1vw !important;
+        border-radius: 0.8vw !important;
+      }
+
+      .product-image {
+        border-bottom-width: 0.1vw !important;
+      }
+
+      .product-category-badge {
+        font-size: 0.75vw !important;
+        padding: 0.15vw 0.6vw !important;
+        top: 0.5vw !important;
+        right: 0.5vw !important;
+        border-width: 0.08vw !important;
+        border-radius: 0.3vw !important;
+      }
+
+      .product-info {
+        padding: 0.5vw 0.8vw !important;
+      }
+
+      .product-name {
+        font-size: 1.15vw !important;
+      }
+
+      .product-meta {
+        padding-top: 0.3vw !important;
+        border-top-width: 0.08vw !important;
+      }
+
+      .product-price {
+        font-size: 1.35vw !important;
+      }
+
+      .product-unit {
+        font-size: 0.8vw !important;
       }
     }
   </style>
@@ -424,7 +536,8 @@
         const imgUrl = product.image || 'assets/logo.jpg';
         
         card.innerHTML = `
-          <div class="product-image" style="background-image: url('${imgUrl}');">
+          <div class="product-image">
+            <img src="${imgUrl}" alt="${product.name}">
             <span class="product-category-badge">${categoryLabel}</span>
           </div>
           <div class="product-info">
