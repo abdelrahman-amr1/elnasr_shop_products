@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منيو حواوشي النصر للطباعة 16:9</title>
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts - Cairo -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap">
+  
+  <style>
+    :root {
+      --primary-color: #9b1c1c;      /* Deep Maroon Red */
+      --secondary-color: #d4af37;    /* Warm Gold */
+      --dark-color: #1a0f0d;         /* Spicy Charcoal */
+      --light-color: #fdfaf6;        /* Ivory Cream Background */
+      --white: #ffffff;
+      --gray-100: #f7f1e5;
+      --gray-200: #eadfc9;
+      --gray-300: #d8c9ae;
+      --gray-600: #7d6b58;
+      --font-family-arabic: 'Cairo', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family-arabic);
+    }
+
+    body {
+      direction: rtl;
+      text-align: right;
+      background-color: #1a1a1a;
+      color: var(--dark-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-bottom: 2rem;
+    }
+
+    /* Print Controls bar (Hidden during print) */
+    .no-print-bar {
+      width: 100%;
+      background: var(--dark-color);
+      border-bottom: 3px solid var(--secondary-color);
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      margin-bottom: 2rem;
+    }
+
+    .no-print-bar h1 {
+      color: var(--white);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    
+    .no-print-bar h1 span {
+      color: var(--secondary-color);
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1.5px solid transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #7f1212;
+      transform: translateY(-1px);
+    }
+
+    /* Print Page Container (16:9 Landscape) */
+    .menu-page {
+      width: 297mm;
+      height: 167mm; /* Exactly 16:9 ratio for 297mm width */
+      background: var(--light-color);
+      border: 5px double var(--secondary-color);
+      outline: 2px solid var(--primary-color);
+      outline-offset: -8px;
+      padding: 5mm;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(rgba(212, 175, 55, 0.04) 1.5px, transparent 0),
+        radial-gradient(rgba(155, 28, 28, 0.03) 1.5px, transparent 0);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+
+    /* Grid Layout */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3.5mm;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Brand/Identity Card (Top Right / Cell 1 in RTL) */
+    .brand-card {
+      background: var(--primary-color);
+      color: var(--white);
+      border: 2px solid var(--secondary-color);
+      border-radius: 12px;
+      padding: 3mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 100 100"><polygon points="50,15 90,85 10,85" fill="none" stroke="rgba(212,175,55,0.06)" stroke-width="1.5"/></svg>');
+      background-size: 40px 40px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .brand-logo {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2.5px solid var(--secondary-color);
+      margin-bottom: 2mm;
+      object-fit: cover;
+      background: var(--white);
+      z-index: 2;
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--secondary-color);
+      line-height: 1.1;
+      margin-bottom: 0.5mm;
+      z-index: 2;
+    }
+
+    .brand-slogan {
+      font-size: 0.7rem;
+      color: var(--white);
+      font-weight: 600;
+      margin-bottom: 2.5mm;
+      z-index: 2;
+    }
+
+    .contact-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 8px;
+      padding: 1.5mm 2mm;
+      display: flex;
+      flex-direction: column;
+      gap: 1mm;
+      z-index: 2;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5mm;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .contact-item i {
+      color: var(--secondary-color);
+      font-size: 0.85rem;
+    }
+
+    .contact-item span {
+      direction: ltr;
+    }
+
+    .delivery-badge {
+      margin-top: 2.5mm;
+      background: var(--secondary-color);
+      color: var(--dark-color);
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 1mm 3mm;
+      border-radius: 50px;
+      z-index: 2;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Product Card */
+    .product-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 72%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-bottom: 1.5px solid var(--gray-100);
+      position: relative;
+    }
+
+    .product-category-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(155, 28, 28, 0.85);
+      backdrop-filter: blur(2px);
+      color: var(--white);
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 0.5mm 2mm;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .product-info {
+      padding: 2mm 3mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      background: var(--white);
+    }
+
+    .product-name {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--dark-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.5mm;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--gray-100);
+      padding-top: 1mm;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--primary-color);
+    }
+
+    .product-unit {
+      font-size: 0.6rem;
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+
+    /* Print Specific Styles */
+    @media print {
+      .no-print-bar {
+        display: none !important;
+      }
+      
+      body {
+        background: var(--white) !important;
+        padding: 0;
+        margin: 0;
+        width: 297mm;
+        height: 210mm;
+        display: block;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+
+      .menu-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 297mm !important;
+        height: 167mm !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (Hidden in Print) -->
+  <div class="no-print-bar">
+    <h1>معاينة المنيو للطباعة <span>(عرضي 16:9 بالصور)</span></h1>
+    <div class="control-buttons">
+      <button onclick="window.print()" class="btn btn-primary">
+        <i class="fa-solid fa-print"></i>
+        <span>طباعة المنيو الآن</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 16:9 Printable Menu Container -->
+  <div class="menu-page" id="menuPage">
+    <div class="menu-grid" id="menuGrid">
+      
+      <!-- Brand Card (Positioned first) -->
+      <div class="brand-card">
+        <img src="assets/logo.jpg" alt="حواوشي النصر" class="brand-logo" id="brandLogo">
+        <h1 class="brand-name">حواوشي النصر</h1>
+        <p class="brand-slogan">أصل الحواوشي البلدي والورقة</p>
+        
+        <div class="contact-box">
+          <div class="contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>01113980729</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>0233355332</span>
+          </div>
+          <div class="contact-item" style="color: #c9ffcc;">
+            <i class="fa-brands fa-whatsapp" style="color: #c9ffcc;"></i>
+            <span>01026401035</span>
+          </div>
+        </div>
+
+        <div class="delivery-badge">
+          <i class="fa-solid fa-truck"></i> توصيل القاهرة والجيزة
+        </div>
+      </div>
+
+      <!-- Dynamically filled cells (11 cells for the 11 items) -->
+
+    </div>
+  </div>
+
+  <!-- Supabase & Database Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js?v=2"></script>
+  <script src="js/database.js?v=2"></script>
+  
+  <script>
+    const CATEGORIES_AR = {
+      hawawshi: "حواوشي",
+      plates: "وجبات وورقات"
+    };
+
+    function populateMenuGrid() {
+      const products = getProducts() || [];
+      
+      // Filter out unavailable items
+      const activeProducts = products.filter(p => p.available !== false);
+      
+      const grid = document.getElementById('menuGrid');
+      if (!grid) return;
+      
+      // Keep only the brand card
+      const brandCard = grid.querySelector('.brand-card');
+      grid.innerHTML = '';
+      grid.appendChild(brandCard);
+      
+      // Add active products (up to 11 to fill the 4x3 grid)
+      const displayProducts = activeProducts.slice(0, 11);
+      
+      displayProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        
+        const categoryLabel = CATEGORIES_AR[product.category] || product.category;
+        const imgUrl = product.image || 'assets/logo.jpg';
+        
+        card.innerHTML = `
+          <div class="product-image" style="background-image: url('${imgUrl}');">
+            <span class="product-category-badge">${categoryLabel}</span>
+          </div>
+          <div class="product-info">
+            <h2 class="product-name">${product.name}</h2>
+            <div class="product-meta">
+              <span class="product-price">${product.price} ج</span>
+              <span class="product-unit">لكل ${product.unit}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      populateMenuGrid();
+      
+      window.addEventListener("productsUpdated", () => {
+        populateMenuGrid();
+      });
+
+      // Error handler for brand logo
+      const brandLogo = document.getElementById('brandLogo');
+      if (brandLogo) {
+        brandLogo.onerror = function() {
+          brandLogo.src = 'assets/logo.jpg';
+        };
+      }
+    });
+  </script>
+</body>
+</html>
